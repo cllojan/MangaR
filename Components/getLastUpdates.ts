@@ -1,6 +1,7 @@
+import { data } from '@/utils/models';
 import cheerio  from 'cheerio';
 
-type Result = string[] | Error
+type Result = data | Error
 
 const getLastUpdate = () => {
     try{
