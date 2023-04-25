@@ -1,13 +1,13 @@
-import Image from 'next/image'
-import styles from './page.module.css'
-import getLastUpdate from '@/Components/getLastUpdates'
+import Image from "next/image";
+import styles from "./page.module.css";
+import getLastUpdate from "@/Components/getLastUpdates";
 
 export default function Home() {
-  const data = getLastUpdate();
+  //const data = getLastUpdate().then((elm) => console.log(elm));
+
   return (
-    <main className={styles.main}>
-    
-      {data.status}
-    </main>
-  )
+    <div className=''>
+      <h1>HOla</h1>
+    </div>
+  );
 }
