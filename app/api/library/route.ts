@@ -1,12 +1,15 @@
 import cheerio from "cheerio";
+import { type NextRequest } from "next/server";
 interface HomeData {
   status: number;
   populares: Array<{}>;
   trending: Array<{}>;
 }
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
+  console.log(request.nextUrl.searchParams.size);
   try {
-    const url = "https://lectormanga.com/";
+    const url =
+      "https://lectormanga.com/library?title=&order_field=title&order_item=likes_count&order_dir=desc&type=&demography=&webcomic=&yonkoma=&amateur=&erotic=";
 
     let manga: HomeData = {
       status: 200,
@@ -36,28 +39,6 @@ export async function GET(request: Request) {
     });
     const data = await response.text();
     const $ = cheerio.load(data);
-
-    //Populares
-    $(
-      "#app > div > div:nth-child(2) > div.col-12.col-lg-8 > div:nth-child(2) .card"
-    ).each((item, el) => {
-      const title = $(el).find("a").text().trim();
-      const href = $(el).find("a").attr("href");
-      const img = $(el).find("img").attr("src");
-      const type = $(el).find("span.float-right").text().trim();
-
-      manga.populares.push({ title, href, img, type });
-    });
-
-    //Trending
-    $(".row.mt-2 .card").each((item, el) => {
-      const title = $(el).find("a").text().trim();
-      const href = $(el).find("a").attr("href");
-      const img = $(el).find("img").attr("src");
-      const type = $(el).find("span.float-right").text().trim();
-
-      manga.trending.push({ title, href, img, type });
-    });
 
     return new Response(JSON.stringify(manga));
   } catch (e) {
