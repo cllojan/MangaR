@@ -1,22 +1,43 @@
+import { Genders } from "@/utils/enums";
 import cheerio from "cheerio";
 import { type NextRequest } from "next/server";
 interface HomeData {
   status: number;
-  populares: Array<{}>;
-  trending: Array<{}>;
+  data: Array<{}>;
 }
-export async function GET(request: NextRequest) {
-  console.log(request.nextUrl.searchParams.size);
-  try {
-    const url =
-      "https://lectormanga.com/library?title=&order_field=title&order_item=likes_count&order_dir=desc&type=&demography=&webcomic=&yonkoma=&amateur=&erotic=";
+interface para{
+  search:string,
+  type:string,
+  demography: string,
+  webcomic: string,
+  genders:string,
+}
+type params = object;
+
+export async function GET(request: NextRequest) {  
+  try {      
+    let param = request.nextUrl;
+    let urlParams:para = {
+      search: param.searchParams.get("search") || "",
+      type: param.searchParams.get("type") || "",
+      demography: param.searchParams.get("demography") || "",
+      webcomic: param.searchParams.get("webcomic") || "",
+      genders: param.searchParams.get("genders") || "",
+    }    
+    
+    //let a = Genders[];
+    
+    const myIndex = Object.keys(Genders).indexOf(urlParams.genders);
+    const myValue = Object.values(Genders)[myIndex]
+    console.log(myValue);
+    let url = `https://lectormanga.com/library?title=${urlParams.search}&type=&demography=&webcomic=&genders=`;
 
     let manga: HomeData = {
       status: 200,
-      populares: new Array(),
-      trending: new Array(),
-    };
+      data: new Array(),
 
+    };
+    
     const response = await fetch(url, {
       headers: {
         accept:
@@ -37,9 +58,18 @@ export async function GET(request: NextRequest) {
       body: null,
       method: "GET",
     });
+
+
     const data = await response.text();
     const $ = cheerio.load(data);
-
+      $(".col-6.col-md-3.col-lg-3.mt-2 .card").each((item, el) => {
+        const title = $(el).find("a").text().trim();
+        const href = $(el).find("a").attr("href");
+        const img = $(el).find("img").attr("src");
+        const type = $(el).find("span.float-right").text().trim();
+        
+        manga.data.push({ title, href, img, type });
+      });
     return new Response(JSON.stringify(manga));
   } catch (e) {
     return new Response(JSON.stringify({ hola: "a" }));
