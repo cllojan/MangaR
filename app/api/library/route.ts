@@ -10,7 +10,7 @@ interface para{
   type:string,
   demography: string,
   webcomic: string,
-  genders:string,
+  genders:string[],
 }
 type params = object;
 
@@ -22,15 +22,13 @@ export async function GET(request: NextRequest) {
       type: param.searchParams.get("type") || "",
       demography: param.searchParams.get("demography") || "",
       webcomic: param.searchParams.get("webcomic") || "",
-      genders: param.searchParams.get("genders") || "",
+      genders: param.searchParams.getAll("genders") || "",
     }    
     
-    //let a = Genders[];
+    let gendersURL = urlParams.genders.map(x=> `&genders%5B%5D=${Genders[x as any]}`).join("");
     
-    const myIndex = Object.keys(Genders).indexOf(urlParams.genders);
-    const myValue = Object.values(Genders)[myIndex]
-    console.log(myValue);
-    let url = `https://lectormanga.com/library?title=${urlParams.search}&type=&demography=&webcomic=&genders=`;
+    //console.log(Genders[urlParams.genders as any])
+    let url = `https://lectormanga.com/library?title=${urlParams.search}&type=&demography=&webcomic=${gendersURL}`;
 
     let manga: HomeData = {
       status: 200,
