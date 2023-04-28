@@ -70,13 +70,13 @@ export async function GET(req: NextRequest,{params}:any) {
           chapters.push({title,date,link})
         })
       
-      /* $("#chapters-collapsed > .row").each((id, el) => {
+       $("#chapters-collapsed > .row").each((id, el) => {
           
         let title = $(el).find(`.col-10.col-md-11 > h4`).attr("title");
         let date = $(`#chapters-collapsed > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span`).text().trim()
         let link = $(`#chapters-collapsed > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a`).attr('href')
         chapters.push({title,date,link})
-      }) */
+      })
         manga.data = {...manga.data, chapters}
       return new Response(JSON.stringify(manga));
     } catch (e) {
