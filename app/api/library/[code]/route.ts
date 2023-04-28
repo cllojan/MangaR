@@ -2,19 +2,17 @@ import { type NextRequest } from "next/server";
 import cheerio from 'cheerio';
 interface HomeData {
   status: number;
-  data: Array<{}>;
+  data: {};
 }
 export async function GET(req: NextRequest,{params}:any) {
     try {
-      let param = req.nextUrl;
-      console.log(params);
-        
-      const url =
-        `https://lectormanga.com/library?title=${params.search}&page=1&order_field=title&order_item=likes_count&order_dir=desc&type=&demography=&webcomic=&yonkoma=&amateur=&erotic=`;
+      
+      const url = 
+        `https://lectormanga.com/library/*/${params.code}/*`;
   
       let manga: HomeData = {
         status: 200,
-        data: new Array(),
+        data: {},
   
       };
   
@@ -40,18 +38,44 @@ export async function GET(req: NextRequest,{params}:any) {
       });
       const data = await response.text();
       const $ = cheerio.load(data);
-        $(".col-6.col-md-3.col-lg-3.mt-2 .card").each((item, el) => {
-          const title = $(el).find("a").text().trim();
-          const href = $(el).find("a").attr("href");
-          const img = $(el).find("img").attr("src");
-          const type = $(el).find("span.float-right").text().trim();
+
+
+      $("#app > div > div:nth-child(2) > div > div > div:nth-child(1)").each((item, el) => {
+          const title = $(el).find("h1.text-dark").text().trim();
+          const description  = $(el).find("div.col-12.mt-2 > p").text().trim();
+          const type = $(el).find("h5:nth-child(2) > span").text().trim();
+          const state = $(el).find(".status-publishing").text().trim();
+          const img = $(el).find("img").attr("src");          
+
+          //Generos
+          const genders:string[] = [];
+           $(el).find("div.col-12.col-sm-9 > a").map((id,el) => genders.push($(el).text().trim()));          
           
-          manga.data.push({ title, href, img, type });
+          //Sinonimos
+          const synonimous:string[] = [];
+          $(el).find("div.col-12.col-sm-9 > span").map((id,el) => synonimous.push($(el).text().trim()));
+          
+          //Capitulos
+          
+         
+
+          manga.data = { title, description, img, type,state,genders,synonimous };
         });
+        let chapters:Array<object> = [];
+        $(" #chapters > .row ,#chapters ul, #chapters-collapsed > .row,#chapters-collapsed > ul").each((id, el) => {
+          
+          let title = $(el).find(`.col-10.col-md-11 > h4`).text().trim();
+          let date = $(el).find("div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()
+          
+          chapters.push({title,date})
+        })
+       
         
+        manga.data = {...manga.data, chapters}
       return new Response(JSON.stringify(manga));
     } catch (e) {
-      return new Response(JSON.stringify({ hola: "a" }));
+      
+      return new Response(JSON.stringify({ hola: e }));
     }
   
 }

@@ -6,6 +6,7 @@ interface HomeData {
   data: Array<{}>;
 }
 interface para{
+  page:number|string,
   search:string,
   type:string,
   demography: string,
@@ -16,19 +17,22 @@ type params = object;
 
 export async function GET(request: NextRequest) {  
   try {      
+
     let param = request.nextUrl;
+    console.log(param.searchParams)
+    //Params 
     let urlParams:para = {
+      page:param.searchParams.get("page") || 1,
       search: param.searchParams.get("search") || "",
       type: param.searchParams.get("type") || "",
       demography: param.searchParams.get("demography") || "",
       webcomic: param.searchParams.get("webcomic") || "",
       genders: param.searchParams.getAll("genders") || "",
     }    
-    
+    //Convert params to string;
     let gendersURL = urlParams.genders.map(x=> `&genders%5B%5D=${Genders[x as any]}`).join("");
     
-    //console.log(Genders[urlParams.genders as any])
-    let url = `https://lectormanga.com/library?title=${urlParams.search}&type=&demography=&webcomic=${gendersURL}`;
+    let url = `https://lectormanga.com/library?title=${urlParams.search}&page=1&type=&demography=&webcomic=${gendersURL}`;
 
     let manga: HomeData = {
       status: 200,
