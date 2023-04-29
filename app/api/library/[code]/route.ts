@@ -61,22 +61,33 @@ export async function GET(req: NextRequest,{params}:any) {
 
           manga.data = { title, description, img, type,state,genders,synonimous };
         });
-        let chapters:Array<object> = [];
-        $(" #chapters > .row ").each((id, el) => {
+        /*
+        let chapters:object = {};
+        $(" #chapters ").each((id, el) => {
           
-          let title = $(el).find(`.col-10.col-md-11 > h4`).attr("title");
-          let date = $(`#chapters > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span`).text().trim()
+          let title:string = $(el).find(`.row .col-10.col-md-11 > h4`).text().trim();
+          //let date = $(`#chapters > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span`).text().trim()
           let link = $(`#chapters > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a`).attr('href')
-          chapters.push({title,date,link})
+          chapters = {...chapters,link}
         })
       
        $("#chapters-collapsed > .row").each((id, el) => {
           
         let title = $(el).find(`.col-10.col-md-11 > h4`).attr("title");
         let date = $(`#chapters-collapsed > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span`).text().trim()
-        let link = $(`#chapters-collapsed > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a`).attr('href')
-        chapters.push({title,date,link})
+        //let link = $(`#chapters-collapsed > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a`).attr('href')
+        chapters.push({title,date})
+      })*/
+      let chapters:Array<object> = [];
+      $(" #chapters,#chapters-collapsed").each((id, el) => {
+        
+       // let title = $(el).find(`.col-10.col-md-11 > h4`).attr("title");
+        //let date = $(`#chapters > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span`).text().trim()
+        let link = $("#chapters > ul > li > div > div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()
+        chapters.push({link})
       })
+      //let link = $(`#chapters > ul > li > div > div.col-6.col-sm-2.text-right > a`).attr('href')
+      
         manga.data = {...manga.data, chapters}
       return new Response(JSON.stringify(manga));
     } catch (e) {
