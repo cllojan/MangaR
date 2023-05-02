@@ -79,15 +79,22 @@ export async function GET(req: NextRequest,{params}:any) {
         chapters.push({title,date})
       })*/
       let chapters:Array<object> = [];
-      $(" #chapters,#chapters-collapsed").each((id, el) => {
-        
-       // let title = $(el).find(`.col-10.col-md-11 > h4`).attr("title");
-        //let date = $(`#chapters > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span`).text().trim()
+      let chapterInfos = $("#chapters .chapter-list")
+     
+      $("#chapters h4.text-truncate").each((id, el) => {
+        let a = $(el).text().trim()
+        let date = $(chapterInfos[id]).find("li > div > div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()
+        let link = $(chapterInfos[id]).find("li > div > div.col-6.col-sm-2.text-right > a").attr("href");
+
+        chapters.push({a,date,link});
+      });
+      /*
+      $(" #chapters,#chapters-collapsed").each((id, el) => {               
         let link = $("#chapters > ul > li > div > div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()
         chapters.push({link})
       })
       //let link = $(`#chapters > ul > li > div > div.col-6.col-sm-2.text-right > a`).attr('href')
-      
+      */
         manga.data = {...manga.data, chapters}
       return new Response(JSON.stringify(manga));
     } catch (e) {
