@@ -54,30 +54,11 @@ export async function GET(req: NextRequest,{params}:any) {
           //Sinonimos
           const synonimous:string[] = [];
           $(el).find("div.col-12.col-sm-9 > span").map((id,el) => synonimous.push($(el).text().trim()));
-          
-          //Capitulos
-          
          
 
           manga.data = { title, description, img, type,state,genders,synonimous };
         });
-        /*
-        let chapters:object = {};
-        $(" #chapters ").each((id, el) => {
-          
-          let title:string = $(el).find(`.row .col-10.col-md-11 > h4`).text().trim();
-          //let date = $(`#chapters > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span`).text().trim()
-          let link = $(`#chapters > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a`).attr('href')
-          chapters = {...chapters,link}
-        })
-      
-       $("#chapters-collapsed > .row").each((id, el) => {
-          
-        let title = $(el).find(`.col-10.col-md-11 > h4`).attr("title");
-        let date = $(`#chapters-collapsed > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span`).text().trim()
-        //let link = $(`#chapters-collapsed > ul:nth-child(${(id+1)*2}) > li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a`).attr('href')
-        chapters.push({title,date})
-      })*/
+       
       let chapters:Array<object> = [];
       let chapterInfos = $("#chapters .chapter-list")
      
@@ -88,13 +69,7 @@ export async function GET(req: NextRequest,{params}:any) {
 
         chapters.push({a,date,link});
       });
-      /*
-      $(" #chapters,#chapters-collapsed").each((id, el) => {               
-        let link = $("#chapters > ul > li > div > div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()
-        chapters.push({link})
-      })
-      //let link = $(`#chapters > ul > li > div > div.col-6.col-sm-2.text-right > a`).attr('href')
-      */
+     
         manga.data = {...manga.data, chapters}
       return new Response(JSON.stringify(manga));
     } catch (e) {
