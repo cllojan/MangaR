@@ -76,6 +76,8 @@ export async function GET(req: NextRequest, { params }: any) {
     return new Response(JSON.stringify(manga));
   } catch (e) {
 
+
+    
     return new Response(JSON.stringify({ error: e }));
   }
 
