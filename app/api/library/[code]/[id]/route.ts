@@ -63,18 +63,33 @@ export async function GET(req:NextRequest,{params}:any){
         });
     
         // Capitulos 
+        */
         let chapters: Array<object> = [];
         let chapterInfos = $("#chapters .chapter-list")
-    
-        $("#chapters h4.text-truncate").each((id, el) => {
+        let getChapters = $("#chapters h4.text-truncate");
+        //capitulos siguientes
+        $(getChapters[params.id]).each((id, el) => {
           let title = $(el).text().trim()
-          let date = $(chapterInfos[id]).find("li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()
-          let link = $(chapterInfos[id]).find("li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a").attr("href");
+          console.log(id)
+          let date = $(chapterInfos[params.id]).find("li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()
+          let link = $(chapterInfos[params.id]).find("li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a").attr("href");
+    
+          chapters.push({ title, date, link });
+        });
+
+        
+        
+        //capitulo anterior
+        $(getChapters[params.id]).each((id, el) => {
+          let title = $(el).text().trim()
+          console.log(id)
+          let date = $(chapterInfos[params.id]).find("li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()
+          let link = $(chapterInfos[params.id]).find("li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a").attr("href");
     
           chapters.push({ title, date, link });
         });
     
-        manga.data = { ...manga.data, chapters }*/
+        manga.data = { ...manga.data, chapters }
         return new Response(JSON.stringify(manga));
       } catch (e) {
     
