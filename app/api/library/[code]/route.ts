@@ -65,11 +65,12 @@ export async function GET(req: NextRequest, { params }: any) {
     let chapterInfos = $("#chapters .chapter-list")
 
     $("#chapters h4.text-truncate").each((id, el) => {
+      
       let title = $(el).text().trim()
       let date = $(chapterInfos[id]).find("li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()
       let link = $(chapterInfos[id]).find("li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a").attr("href");
 
-      chapters.push({ title, date, link });
+      chapters.push({ id, title, date, link });
     });
 
     manga.data = { ...manga.data, chapters }
