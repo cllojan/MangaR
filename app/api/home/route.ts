@@ -41,8 +41,10 @@ export async function GET(request: Request) {
     $(
       "#app > div > div:nth-child(2) > div.col-12.col-lg-8 > div:nth-child(2) .card"
     ).each((item, el) => {
+     
       const title = $(el).find("a").text().trim();
       const href = $(el).find("a").attr("href");
+      
       const img = $(el).find("img").attr("src");
       const type = $(el).find("span.float-right").text().trim();
 
@@ -51,8 +53,10 @@ export async function GET(request: Request) {
 
     //Trending
     $(".row.mt-2 .card").each((item, el) => {
+    
       const title = $(el).find("a").text().trim();
       const href = $(el).find("a").attr("href");
+      
       const img = $(el).find("img").attr("src");
       const type = $(el).find("span.float-right").text().trim();
 
