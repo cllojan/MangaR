@@ -4,9 +4,11 @@ interface HomeData {
     status: number;
     data: {};
   }
-export async function GET(req:NextRequest,{params}:any){
+export async function GET(request:NextRequest,{params}:any){
     try {
-        console.log(params)
+        let param = request.nextUrl;    
+        let val = Number(param.searchParams.get("data"))
+        
         const url = 
           `https://lectormanga.com/library/*/${params.code}/*`;
     
@@ -42,54 +44,42 @@ export async function GET(req:NextRequest,{params}:any){
         const data = await response.text();
         const $ = cheerio.load(data);
     
-        /*
-        $("#app > div > div:nth-child(2) > div > div > div:nth-child(1)").each((_, el) => {
-          const title = $(el).find("h1.text-dark").text().trim();
-          const description = $(el).find("div.col-12.mt-2 > p").text().trim();
-          const type = $(el).find("h5:nth-child(2) > span").text().trim();
-          const state = $(el).find(".status-publishing").text().trim();
-          const img = $(el).find("img").attr("src");
-    
-          //Generos
-          const genders: string[] = [];
-          $(el).find("div.col-12.col-sm-9 > a").map((_, el) => genders.push($(el).text().trim()));
-    
-          //Sinonimos
-          const synonimous: string[] = [];
-          $(el).find("div.col-12.col-sm-9 > span").map((_, el) => synonimous.push($(el).text().trim()));
-    
-    
-          manga.data = { title, description, img, type, state, genders, synonimous };
-        });
-    
-        // Capitulos 
-        */
-        let chapters: Array<object> = [];
+       
+        let last: Array<object> = [];
+        let next: Array<object> = [];
         let chapterInfos = $("#chapters .chapter-list")
         let getChapters = $("#chapters h4.text-truncate");
+        console.log(getChapters.length)
         //capitulos siguientes
-        $(getChapters[params.id]).each((id, el) => {
-          let title = $(el).text().trim()
-          console.log(id)
-          let date = $(chapterInfos[params.id]).find("li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()
-          let link = $(chapterInfos[params.id]).find("li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a").attr("href");
-    
-          chapters.push({ title, date, link });
-        });
-
-        
-        
+        if(val == 0 ){
+          next.push({empty:"Ultimo Capitulo"})
+        }else{
+          $(getChapters[val-1]).each((id, el) => {
+            let title = $(el).text().trim()         
+            let date = $(chapterInfos[val-1]).find("li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()        
+            let link = $(chapterInfos[val-1]).find("li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a").attr("href");
+      
+            next.push({ title, date, link });
+          });
+  
+        }
         //capitulo anterior
-        $(getChapters[params.id]).each((id, el) => {
-          let title = $(el).text().trim()
-          console.log(id)
-          let date = $(chapterInfos[params.id]).find("li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()
-          let link = $(chapterInfos[params.id]).find("li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a").attr("href");
+        if(val >=getChapters.length-1){
+          last.push({empty:"Es el primer capitulo :v"})
+        }else{
+          $(getChapters[val+1]).each((id, el) => {
+            let title = $(el).text().trim()
+           
+            let date = $(chapterInfos[val+1]).find("li:nth-child(1) > div > div.col-6.col-sm-6.col-md-2.text-center > span").text().trim()
+            let link = $(chapterInfos[val+1]).find("li:nth-child(1) > div > div.col-6.col-sm-2.text-right > a").attr("href");
+      
+            last.push({ title, date, link });
+          });
+        }
+        
+      
     
-          chapters.push({ title, date, link });
-        });
-    
-        manga.data = { ...manga.data, chapters }
+        manga.data = { ...manga.data, last,next }
         return new Response(JSON.stringify(manga));
       } catch (e) {
     
