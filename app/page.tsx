@@ -1,15 +1,19 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-import getLastUpdate from "@/Components/getLastUpdates";
-import { json } from "stream/consumers";
 import { use } from "react";
-
-async function getHome(){
-  return await( await fetch(`${process.env.LOCAL}/api/home`,{cache:'no-store'})).json();
+import Item from "./Components/Item";
+interface MItem {
+  title: string;
+  href: string;
+  img: string;
+  type: string;
+}
+async function getHome() {
+  return await (
+    await fetch(`${process.env.LOCAL}/api/home`, { cache: "no-store" })
+  ).json();
 }
 export default function Home() {
   //const data = getLastUpdate().then((elm) => console.log(elm));
-  
+
   const data = use(getHome());
   /*
   let aa = /\/\d+\//gi
@@ -17,14 +21,11 @@ export default function Home() {
       const link = `${process.env.LOCAL}api/library/${href}`
   */
 
-
   return (
-    <div className=''>
-      {
-        data.populares?.map((elm:any,id:number) => (
-          <h1 key={id}>{elm.title}</h1>
-        ))
-      }
+    <div className="">
+      {data.populares?.map((elm: any, id: number) => (        
+        <Item key={id} title={elm.title} href={elm.href} img={elm.img} type={elm.type} />        
+      ))}
     </div>
   );
 }
