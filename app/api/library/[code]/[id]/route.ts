@@ -66,6 +66,7 @@ export async function GET(request: NextRequest, { params }: any) {
     });
     const data = await response.text();
     const dataNL = await responseNL.text();
+    console.log(dataNL)
 
     const getDomain = /domain=[A-Za-z]+.com/gi;
     let getParamLector = /TMOUpload_\w+/gi;
@@ -115,7 +116,7 @@ export async function GET(request: NextRequest, { params }: any) {
     });
 
     manga.data = { container };
-
+    
     let last: Array<object> = [];
     let next: Array<object> = [];
     let chapterInfos = item("#chapters .chapter-list");
