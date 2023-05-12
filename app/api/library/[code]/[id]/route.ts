@@ -35,7 +35,7 @@ export async function GET(request: NextRequest, { params }: any) {
         "sec-fetch-user": "?1",
         "upgrade-insecure-requests": "1",
       },
-      referrer: `https://lectormanga.com/library/*/${params.code}/*`,
+      referrer: `https://lectormanga.com`,
       referrerPolicy: "no-referrer-when-downgrade",
       body: null,
       method: "GET",
@@ -65,8 +65,9 @@ export async function GET(request: NextRequest, { params }: any) {
       credentials: "include",
     });
     const data = await response.text();
+    console.log(data)
     const dataNL = await responseNL.text();
-    console.log(dataNL)
+    
 
     const getDomain = /domain=[A-Za-z]+.com/gi;
     let getParamLector = /TMOUpload_\w+/gi;
