@@ -16,8 +16,7 @@ export async function GET(request: NextRequest, { params }: any) {
     let manga: HomeData = {
       status: 200,
       data: {
-        code: params.code,
-        id: params.id,
+        
       },
     };
     const responseNL = await fetch(urlNL,{
@@ -40,7 +39,7 @@ export async function GET(request: NextRequest, { params }: any) {
       body: null,
       method: "GET",
       mode: "cors",
-      cache:'no-cache',
+      
       credentials: "include",
     })
     const response = await fetch(url, {
@@ -63,7 +62,7 @@ export async function GET(request: NextRequest, { params }: any) {
       body: null,
       method: "GET",
       mode: "cors",
-      cache:'no-cache',
+      
       credentials: "include",
     });
     const data = await response.text();
@@ -103,18 +102,19 @@ export async function GET(request: NextRequest, { params }: any) {
       body: null,
       method: "GET",
       mode: "cors",
-      cache:'no-cache',
+     
       credentials: "include",
     });
     const lector = await extResp.text();
-    console.log(lector);
+    
     const $ = cheerio.load(lector);
     const item = cheerio.load(dataNL);
     
     let container: string[] = [];
     $("#viewer-container > .viewer-image-container").each((id, el) => {
       
-      let img:string = $(el).find("img").attr("data-src") || "";
+      let img:string = $(el).find("img").attr("src") || "";
+      console.log(img);
       container.push(img);
 
     });
