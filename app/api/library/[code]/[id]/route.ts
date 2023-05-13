@@ -40,6 +40,7 @@ export async function GET(request: NextRequest, { params }: any) {
       body: null,
       method: "GET",
       mode: "cors",
+      cache:'no-cache',
       credentials: "include",
     })
     const response = await fetch(url, {
@@ -62,10 +63,11 @@ export async function GET(request: NextRequest, { params }: any) {
       body: null,
       method: "GET",
       mode: "cors",
+      cache:'no-cache',
       credentials: "include",
     });
     const data = await response.text();
-    console.log(data)
+    
     const dataNL = await responseNL.text();
     
 
@@ -101,10 +103,11 @@ export async function GET(request: NextRequest, { params }: any) {
       body: null,
       method: "GET",
       mode: "cors",
+      cache:'no-cache',
       credentials: "include",
     });
     const lector = await extResp.text();
-    
+    console.log(lector);
     const $ = cheerio.load(lector);
     const item = cheerio.load(dataNL);
     

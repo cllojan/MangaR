@@ -35,6 +35,7 @@ export async function GET(req: NextRequest, { params }: any) {
       },
       referrerPolicy: "strict-origin-when-cross-origin",
       body: null,
+      cache:'no-cache',
       method: "GET",
     });
     const data = await response.text();
