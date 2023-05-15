@@ -113,7 +113,8 @@ export async function GET(request: NextRequest, { params }: any) {
     
     let path = JSON.parse(JSON.stringify(lector.match(dirPath)).replace(/var\s+dirPath\s+=\s+'/gi,''))[0].replace(/'/gi,'');
     let images = JSON.parse(JSON.parse(JSON.stringify(lector.match(imagesRX)).replace(/var\s+images\s+=\s+JSON\.parse\('(.+?)'\)/,'$1'))[0].replace(';',""));
-    console.log(images);
+    container = [...images.map((elm:string) => path+elm)];
+    console.log(container);
     manga.data = { container };
     
     let last: Array<object> = [];
