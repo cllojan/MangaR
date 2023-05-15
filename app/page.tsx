@@ -8,7 +8,9 @@ interface MItem {
 }
 async function getHome() {
   return await (
-    await fetch(`${process.env.LOCAL}/api/home`)
+    await fetch(`${process.env.LOCAL}/api/home`,{
+      cache:'no-cache'
+    })
   ).json();
 }
 export default function Home() {

@@ -38,8 +38,7 @@ export async function GET(request: NextRequest, { params }: any) {
       referrerPolicy: "no-referrer-when-downgrade",
       body: null,
       method: "GET",
-      mode: "cors",
-      
+      mode: "cors",      
       credentials: "include",
     })
     const response = await fetch(url, {
@@ -61,8 +60,7 @@ export async function GET(request: NextRequest, { params }: any) {
       referrerPolicy: "no-referrer-when-downgrade",
       body: null,
       method: "GET",
-      mode: "cors",
-      
+      mode: "cors",      
       credentials: "include",
     });
     const data = await response.text();
@@ -80,7 +78,7 @@ export async function GET(request: NextRequest, { params }: any) {
     let paramLector = JSON.stringify(data.match(getParamLector))
       .replace(/\W+/gi, "")
       .replace("TMOUpload_", "");
-    let externalURL = `https://${domain}/news/${paramLector}/cascade`;
+    let externalURL = `https://${domain}/news/${paramLector}/paginated/1`;
 
     const extResp = await fetch(externalURL, {
       headers: {
@@ -97,13 +95,10 @@ export async function GET(request: NextRequest, { params }: any) {
         "sec-fetch-user": "?1",
         "upgrade-insecure-requests": "1",
       },
-      referrer: `https://lectormanga.com/library/*/${params.code}/*`,
-      referrerPolicy: "no-referrer-when-downgrade",
-      body: null,
+      referrer: `https://lectormanga.com`,
+      referrerPolicy: "no-referrer-when-downgrade",      
       method: "GET",
-      mode: "cors",
-     
-      credentials: "include",
+      mode: "cors",           
     });
     const lector = await extResp.text();
     
@@ -111,14 +106,14 @@ export async function GET(request: NextRequest, { params }: any) {
     const item = cheerio.load(dataNL);
     
     let container: string[] = [];
-    $("#viewer-container > .viewer-image-container").each((id, el) => {
-      
-      let img:string = $(el).find("img").attr("src") || "";
-      console.log(img);
-      container.push(img);
-
-    });
-
+   //lector
+    const dirPath = /var\s+dirPath\s+=\s+'(.+?)'/gi
+    const imagesRX = /var\s+images\s+=\s+JSON\.parse\('(.+?)'\);/gi
+    lector.match(imagesRX)
+    
+    let path = JSON.parse(JSON.stringify(lector.match(dirPath)).replace(/var\s+dirPath\s+=\s+'/gi,''))[0].replace(/'/gi,'');
+    let images = JSON.parse(JSON.parse(JSON.stringify(lector.match(imagesRX)).replace(/var\s+images\s+=\s+JSON\.parse\('(.+?)'\)/,'$1'))[0].replace(';',""));
+    console.log(images);
     manga.data = { container };
     
     let last: Array<object> = [];

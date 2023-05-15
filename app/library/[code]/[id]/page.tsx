@@ -5,9 +5,7 @@ interface pageProps{
 async function getHome(code:string,id:string) {
     
     return await (
-      await fetch(`${process.env.LOCAL}/api/library/${code}/${id}`,{
-        cache:'no-cache'
-      })
+      await fetch(`${process.env.LOCAL}/api/library/${code}/${id}`)
     ).json();
 }
 /*
