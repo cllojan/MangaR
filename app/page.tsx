@@ -1,5 +1,7 @@
 import { use } from "react";
 import Item from "./Components/Item";
+
+
 interface MItem {
   title: string;
   href: string;
@@ -24,10 +26,12 @@ export default function Home() {
   */
 
   return (
-    <div className="">
+    <div className="container mx-auto px-10 py-20">
+      <div className="flex items-center justify-between">
       {data.populares?.map((elm: any, id: number) => (        
         <Item key={id} title={elm.title} href={elm.href} img={elm.img} type={elm.type} />        
       ))}
+      </div>      
     </div>
   );
 }
