@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card"
 
 import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
 
 import {
   ContextMenu,
@@ -39,41 +40,30 @@ const item = ({ title,href,img,type }:MItem) => {
   const link = `${process.env.LOCAL}library/${newHref}`
   
   return (     
-    <div className={cn("space-y-3 m-1")}>
-    <ContextMenu>
-      <ContextMenuTrigger>
-        <div className="overflow-hidden rounded-md">
-          <Image
-            src={img}
-            alt={title}
-            width={400}
-            height={400}
-            className={cn(
-              "h-auto w-auto object-cover transition-all hover:scale-105",
-              
-            )}
-          />
-        </div>
-      </ContextMenuTrigger>
-      <ContextMenuContent className="w-40">
-        <ContextMenuItem>Add to Library</ContextMenuItem>
-        <ContextMenuSub>
-          <ContextMenuSubTrigger>Add to Playlist</ContextMenuSubTrigger>
-          <ContextMenuSubContent className="w-48">
-           
-            <ContextMenuSeparator />
-            
-          </ContextMenuSubContent>
-        </ContextMenuSub>
-        <ContextMenuSeparator />
-      
-      </ContextMenuContent>
-    </ContextMenu>
-    <div className="break-all space-y-1 text-sm">
-      <h3 className="truncate font-medium leading-none">{title}</h3>
-      <p className=" text-xs text-muted-foreground">{type}</p>
-    </div>
-  </div>               
+    <Link className={cn("space-y-3")} href={link}>
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <div className="truncate overflow-hidden rounded-md">
+            <Image
+              src={img ? img : "https://peugeot.navigation.com/static/WFS/Shop-CitroenEMEA-Site/-/Shop-CitroenEMEA/en_GB/Product%20Not%20Found.png"}
+              alt={title}
+              width={300}
+              height={300}
+              className={cn(
+                "h-auto w-auto object-cover transition-all hover:scale-105",
+                
+              )}
+            />
+          </div>
+        </ContextMenuTrigger>
+        
+      </ContextMenu>
+      <div className="break-all space-y-1 text-sm">
+        <h3 className="truncate overflow-hidden  line-clamp-1 font-medium leading-none">{title}</h3>
+        
+        <Badge variant="outline">{type}</Badge>
+      </div>
+    </Link>               
   );
 };
 
