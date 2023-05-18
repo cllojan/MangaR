@@ -62,10 +62,12 @@ export async function GET(request: NextRequest, { params }: any) {
     });
    
     const data = await response.text();
-    console.log(data);
-    const dataNL = await responseNL.text();
     
-
+    const dataNL = await responseNL.text();
+    const item = cheerio.load(dataNL);
+    const getParamsData = /const\s+params={(.+?)}/gi;
+    console.log(data.match(getParamsData));
+    /*
     const getDomain = /domain=[A-Za-z]+.com/gi;
     let getParamLector = /TMOUpload_\w+/gi;
     const resHeader = await response.headers.get("set-cookie");
@@ -76,35 +78,16 @@ export async function GET(request: NextRequest, { params }: any) {
     let paramLector = JSON.stringify(data.match(getParamLector))
       .replace(/\W+/gi, "")
       .replace("TMOUpload_", "");
-    let externalURL = `https://${domain}/news/${paramLector}/cascade`;
     
-    const extResp = await fetch(externalURL, {
-      headers: {
-        accept:
-          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-        "accept-language": "es,es-ES;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
-        "sec-ch-ua":
-          '"Chromium";v="112", "Microsoft Edge";v="112", "Not:A-Brand";v="99"',
-        "sec-ch-ua-mobile": "?0",
-        "sec-ch-ua-platform": '"Windows"',
-        "sec-fetch-dest": "document",
-        "sec-fetch-mode": "navigate",
-        "sec-fetch-site": "same-origin",
-        "sec-fetch-user": "?1",
-        "upgrade-insecure-requests": "1",
-      },
-      referrer: `https://lectormanga.com/library/*/${params.code}/*`,
-      referrerPolicy: "no-referrer-when-downgrade",
-      body: null,
-      method: "GET",
-      mode: "cors",      
-      credentials: "include",
-    });
+    let externalURL = `https://${domain}/news/123/cascade`;
+    
+    const extResp = await fetch(externalURL);
    
+ 
     const lector = await extResp.text();
     
     const $ = cheerio.load(lector);
-    const item = cheerio.load(dataNL);
+    
     
     let container: string[] = [];
     $("#viewer-container > .viewer-image-container").each((id, el) => {
@@ -112,7 +95,8 @@ export async function GET(request: NextRequest, { params }: any) {
       container.push(img);
 
     });
-    /*
+   
+    
     const dirPath = /var\s+dirPath\s+=\s+'(.+?)'/gi
     const imagesRX = /var\s+images\s+=\s+JSON\.parse\('(.+?)'\);/gi
     lector.match(imagesRX)
@@ -121,8 +105,7 @@ export async function GET(request: NextRequest, { params }: any) {
     let images = JSON.parse(JSON.parse(JSON.stringify(lector.match(imagesRX)).replace(/var\s+images\s+=\s+JSON\.parse\('(.+?)'\)/,'$1'))[0].replace(';',""));
     container = [...images.map((elm:string) => path+elm)];
     */
-    
-    manga.data = { container };
+  
     
     let last: Array<object> = [];
     let next: Array<object> = [];
