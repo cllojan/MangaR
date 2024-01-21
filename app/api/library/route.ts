@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
   try {      
 
     let param = request.nextUrl;
-    console.log(param.searchParams)
+   // console.log(param.searchParams)
     //Params 
     let urlParams:para = {
       page:param.searchParams.get("page") || 1,
