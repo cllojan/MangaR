@@ -74,6 +74,6 @@ export async function GET(request: NextRequest) {
       });
     return new Response(JSON.stringify(manga));
   } catch (e) {
-    return new Response(JSON.stringify({ hola: "a" }));
+    return new Response(JSON.stringify({ error: "Error: " + e }));
   }
 }
